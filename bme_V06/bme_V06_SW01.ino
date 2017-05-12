@@ -7,6 +7,8 @@ esp8266 with BME280
  f4goh@orange.fr
 */
 
+/* DL2NEW 12.05.2017: Version SW01 - ntp-Abfrage, bis Rückmeldung "valid" kommt */
+
 #include <Wire.h>
 #include <SPI.h>
 #include <ESP8266WiFi.h>
@@ -266,9 +268,11 @@ void ntp()
     // first parameter: Time zone in floating point (for India); second parameter: 1 for European summer time; 2 for US daylight saving time (not implemented yet)
     dateTime = NTPch.getNTPtime(1.0, 1);
 
-    //SW: Kann einige male dauern, bis Rückgabe korrekt ist
-    while(!dateTime.valid){
+    // SW: Kann einige Male dauern, bis Rückgabe korrekt ist, max. 1000 Durchgaenge
+    int b = 0;
+    while(!dateTime.valid && (b < 1000)){
       dateTime = NTPch.getNTPtime(1.0, 1);
+      b++;
     }
 
     NTPch.printDateTime(dateTime);

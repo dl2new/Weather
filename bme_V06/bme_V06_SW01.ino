@@ -273,6 +273,7 @@ void ntp()
     while(!dateTime.valid && (b < 1000)){
       dateTime = NTPch.getNTPtime(1.0, 1);
       b++;
+      delay(100);
     }
 
     NTPch.printDateTime(dateTime);

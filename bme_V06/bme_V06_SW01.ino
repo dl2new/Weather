@@ -19,7 +19,8 @@ esp8266 with BME280
 
 #include "FS.h"
 
-NTPtime NTPch("de.pool.ntp.org");  //SW: Changed to de.pool...
+NTPtime NTPch("de.pool.ntp.org");  //DL2NEW: Changed to de.pool...
+//NTPtime NTPch("ch.pool.ntp.org");
 //NTPtime NTPch("time.nist.gov");
 
 #include <SparkFunBME280.h>
@@ -268,11 +269,8 @@ void ntp()
     // first parameter: Time zone in floating point (for India); second parameter: 1 for European summer time; 2 for US daylight saving time (not implemented yet)
     dateTime = NTPch.getNTPtime(1.0, 1);
 
-    // SW: Kann einige Male dauern, bis Rückgabe korrekt ist, max. 1000 Durchgaenge
-    int b = 0;
-    while(!dateTime.valid && (b < 1000)){
+    while(!dateTime.valid){ //DL2NEW: sometime ntp fails - while until return is valid
       dateTime = NTPch.getNTPtime(1.0, 1);
-      b++;
       delay(100);
     }
 
